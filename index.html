@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Real Lucky Dangle</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: radial-gradient(circle at 50% 30%, #1f2937, #0b0f19);
+      height: 100vh;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+    .hint {
+      position: absolute;
+      top: 20px;
+      width: 100%;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 13px;
+      letter-spacing: 0.5px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .bottom-container {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+    }
+    .charms-list {
+      display: flex;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 10px 18px;
+      border-radius: 40px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .charms-list button {
+      font-size: 26px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+      transition: transform 0.15s;
+    }
+    .charms-list button:active {
+      transform: scale(1.3);
+    }
+    .credits {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: lowercase;
+      font-weight: 500;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+    .credits span {
+      color: #ffd700;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hint">馃憞 喈瘖喈瘝喈瘓喈瘓 喈喈熰喈氞瘝喈氞 喈囙喁佮畽喁嵿畷 / 喈膏瘝喈曕喈班瘈喈┼瘓 喈膏瘝喈掂瘓喈瘝 喈喁嵿喈� 喈嗋疅喁嵿疅喁佮畽喁嵿畷!</div>
+  <canvas id="canvas"></canvas>
+
+  <div class="bottom-container">
+    <div class="charms-list">
+      <button onclick="setCharm('馃懝')">馃懝</button>
+      <button onclick="setCharm('馃崑')">馃崑</button>
+      <button onclick="setCharm('馃Э')">馃Э</button>
+      <button onclick="setCharm('馃尪锔�')">馃尪锔�</button>
+      <button onclick="setCharm('馃敂')">馃敂</button>
+    </div>
+    <div class="credits">created by <span>Magic Sathish</span> 鉁�</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
+      ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    const NUM_POINTS = 9;
+    const SEGMENT_LEN = 15;
+    let points = [];
+    let currentEmoji = '馃懝';
+
+    let gravityX = 0;
+    let gravityY = 0.6;
+
+    function initRope() {
+      points = [];
+      const originX = window.innerWidth / 2;
+      for (let i = 0; i < NUM_POINTS; i++) {
+        points.push({
+          x: originX,
+          y: i * SEGMENT_LEN + 5,
+          oldX: originX,
+          oldY: i * SEGMENT_LEN + 5,
+          pinned: (i === 0)
+        });
+      }
+    }
+    initRope();
+
+    window.addEventListener('deviceorientation', (e) => {
+      if (e.gamma !== null) {
+        gravityX = Math.max(-1.5, Math.min(1.5, (e.gamma / 30)));
+      }
+    });
+
+    window.addEventListener('devicemotion', (e) => {
+      const acc = e.acceleration || e.accelerationIncludingGravity;
+      if (acc && acc.x !== null) {
+        const tip = points[points.length - 1];
+        tip.oldX += acc.x * 0.5;
+        tip.oldY += (acc.y || 0) * 0.3;
+      }
+    });
+
+    let isDragging = false;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let dragVelocityX = 0;
+    let dragVelocityY = 0;
+
+    window.addEventListener('pointerdown', (e) => {
+      if (e.clientY > window.innerHeight - 100) return;
+      isDragging = true;
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+      dragVelocityX = 0;
+      dragVelocityY = 0;
+
+      const tip = points[points.length - 1];
+      tip.x = e.clientX;
+      tip.y = Math.max(e.clientY, 80);
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      dragVelocityX = e.clientX - lastPointerX;
+      dragVelocityY = e.clientY - lastPointerY;
+      lastPointerX = e.clientX;
+      lastPointerY = e.clientY;
+
+      const tip = points[points.length - 1];
+      tip.x = e.clientX;
+      tip.y = Math.max(e.clientY, 80);
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (isDragging) {
+        isDragging = false;
+        const tip = points[points.length - 1];
+        tip.oldX = tip.x - dragVelocityX * 1.5;
+        tip.oldY = tip.y - dragVelocityY * 1.5;
+      }
+    });
+
+    function updatePhysics() {
+      points[0].x = window.innerWidth / 2;
+      points[0].y = 0;
+
+      for (let i = 1; i < points.length; i++) {
+        const p = points[i];
+        if (isDragging && i === points.length - 1) continue;
+
+        const vx = (p.x - p.oldX) * 0.985;
+        const vy = (p.y - p.oldY) * 0.985;
+
+        p.oldX = p.x;
+        p.oldY = p.y;
+
+        p.x += vx + gravityX;
+        p.y += vy + gravityY;
+      }
+
+      for (let iter = 0; iter < 5; iter++) {
+        for (let i = 0; i < points.length - 1; i++) {
+          const p1 = points[i];
+          const p2 = points[i + 1];
+
+          const dx = p2.x - p1.x;
+          const dy = p2.y - p1.y;
+          const dist = Math.hypot(dx, dy);
+          const diff = (dist - SEGMENT_LEN) / (dist || 1);
+
+          if (!p1.pinned) {
+            p1.x += dx * 0.5 * diff;
+            p1.y += dy * 0.5 * diff;
+          }
+          if (!(isDragging && i + 1 === points.length - 1)) {
+            p2.x -= dx * 0.5 * diff;
+            p2.y -= dy * 0.5 * diff;
+          }
+        }
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        ctx.lineTo(points[i].x, points[i].y);
+      }
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 3.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      const last = points[points.length - 1];
+      const prev = points[points.length - 2];
+      const angle = Math.atan2(last.y - prev.y, last.x - prev.x) - Math.PI / 2;
+
+      ctx.save();
+      ctx.translate(last.x, last.y);
+      ctx.rotate(angle);
+      ctx.font = '60px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.shadowColor = 'rgba(0,0,0,0.5)';
+      ctx.shadowBlur = 10;
+      ctx.fillText(currentEmoji, 0, 0);
+      ctx.restore();
+
+      updatePhysics();
+      requestAnimationFrame(draw);
+    }
+
+    function setCharm(emoji) {
+      currentEmoji = emoji;
+      const last = points[points.length - 1];
+      last.oldX -= 30;
+    }
+
+    draw();
+  </script>
+</body>
+</html>
