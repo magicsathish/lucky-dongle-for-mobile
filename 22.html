@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📜 சகாதேவர் அருளிய தொடுகூறி சாஸ்திரம் - Digitalized by Magic Sathish</title>
+    <style>
+        :root {
+            --primary-color: #4a0e17;
+            --secondary-color: #d4af37;
+            --accent-gold: #ffd700;
+            --bg-color: #1a0a0d;
+            --paper-bg: #fdf6e2;
+            --text-color: #2c1810;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#3a151b 1px, transparent 0);
+            background-size: 24px 24px;
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.7;
+        }
+
+        .container { max-width: 950px; margin: 0 auto; }
+
+        header {
+            text-align: center;
+            padding: 25px 15px;
+            background: linear-gradient(135deg, #2b080c, #4a0e17);
+            border: 3px solid var(--secondary-color);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+            color: var(--accent-gold);
+        }
+
+        h1 { margin: 0 0 10px 0; font-size: 2.2em; text-shadow: 2px 2px 4px #000; }
+        p.subtitle { color: #f3e5ab; font-size: 1.1em; font-style: italic; margin: 5px 0 0 0; }
+        
+        .creator-tag {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 5px 15px;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--secondary-color);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        .ancient-board-container {
+            background-color: var(--paper-bg);
+            border: 5px solid var(--secondary-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: inset 0 0 40px rgba(74, 14, 23, 0.4), 0 10px 35px rgba(0,0,0,0.9);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .board-instruction {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+            background: #2b1108;
+            padding: 18px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 650px) {
+            .image-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .num-tile {
+            background: linear-gradient(145deg, #d4af37 0%, #8a6d1b 100%);
+            border: 1.5px solid #ffe89c;
+            color: #1a0a0d;
+            font-weight: bold;
+            font-size: 1.15em;
+            padding: 12px 2px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .num-tile:hover {
+            background: linear-gradient(145deg, #ffffff 0%, #ffd700 100%);
+            color: var(--primary-color);
+            transform: translateY(-3px) scale(1.06);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .result-card {
+            background-color: var(--paper-bg);
+            border: 2px solid var(--secondary-color);
+            border-left: 10px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            scroll-margin-top: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px dashed #d4af37;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-number { font-size: 1.7em; font-weight: bold; color: var(--primary-color); }
+
+        .btn-group { display: flex; gap: 8px; }
+
+        .voice-btn, .back-to-top {
+            font-size: 0.85em;
+            color: var(--accent-gold);
+            background: var(--primary-color);
+            border: 1px solid var(--secondary-color);
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .voice-btn:hover, .back-to-top:hover {
+            background: var(--secondary-color);
+            color: #000;
+        }
+
+        .song-box {
+            background-color: #f4ea8a;
+            border-left: 4px solid #b8860b;
+            padding: 14px 18px;
+            font-style: italic;
+            margin-bottom: 15px;
+            white-space: pre-line;
+            color: #3a1a00;
+            border-radius: 4px;
+            font-size: 1.05em;
+        }
+
+        .result-text { margin-bottom: 10px; color: #2b1108; }
+        .deep-meaning {
+            background-color: #ebdcb9;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #c9b07a;
+            color: #3b1e06;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-size: 0.95em;
+            border-top: 1px solid rgba(212, 175, 55, 0.3);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header id="top">
+        <h1>📜சகாதேவர் அருளிய தொடுகூறி சாஸ்திரம்📜</h1>
+        <p class="subtitle">மனதில் எண்ணிய எண்ணைத் தொட்டவுடன் தானாகச் சென்று AI குரல் வழிகாட்டும் ஆழமான ஜோதிட பலன்கள்</p>
+        <div class="creator-tag">✨ Digitalized by <strong>Magic Sathish</strong> ✨</div>
+    </header>
+
+    <!-- 64 எண்கள் கொண்ட சக்கரப் பலகை -->
+    <div class="ancient-board-container">
+        <div class="board-instruction">✨ கீழே உள்ள தொடுகூறிச் சக்கரப் பலகையில் ஏதேனும் ஒரு எண்ணைத் தொடவும் ✨</div>
+        <div class="image-grid">
+            <!-- 111 - 144 -->
+            <div class="num-tile" onclick="handleTouch('num-111')">111</div>
+            <div class="num-tile" onclick="handleTouch('num-112')">112</div>
+            <div class="num-tile" onclick="handleTouch('num-113')">113</div>
+            <div class="num-tile" onclick="handleTouch('num-114')">114</div>
+            <div class="num-tile" onclick="handleTouch('num-121')">121</div>
+            <div class="num-tile" onclick="handleTouch('num-122')">122</div>
+            <div class="num-tile" onclick="handleTouch('num-123')">123</div>
+            <div class="num-tile" onclick="handleTouch('num-124')">124</div>
+            <div class="num-tile" onclick="handleTouch('num-131')">131</div>
+            <div class="num-tile" onclick="handleTouch('num-132')">132</div>
+            <div class="num-tile" onclick="handleTouch('num-133')">133</div>
+            <div class="num-tile" onclick="handleTouch('num-134')">134</div>
+            <div class="num-tile" onclick="handleTouch('num-141')">141</div>
+            <div class="num-tile" onclick="handleTouch('num-142')">142</div>
+            <div class="num-tile" onclick="handleTouch('num-143')">143</div>
+            <div class="num-tile" onclick="handleTouch('num-144')">144</div>
+
+            <!-- 211 - 244 -->
+            <div class="num-tile" onclick="handleTouch('num-211')">211</div>
+            <div class="num-tile" onclick="handleTouch('num-212')">212</div>
+            <div class="num-tile" onclick="handleTouch('num-213')">213</div>
+            <div class="num-tile" onclick="handleTouch('num-214')">214</div>
+            <div class="num-tile" onclick="handleTouch('num-221')">221</div>
+            <div class="num-tile" onclick="handleTouch('num-222')">222</div>
+            <div class="num-tile" onclick="handleTouch('num-223')">223</div>
+            <div class="num-tile" onclick="handleTouch('num-224')">224</div>
+            <div class="num-tile" onclick="handleTouch('num-231')">231</div>
+            <div class="num-tile" onclick="handleTouch('num-232')">232</div>
+            <div class="num-tile" onclick="handleTouch('num-233')">233</div>
+            <div class="num-tile" onclick="handleTouch('num-234')">234</div>
+            <div class="num-tile" onclick="handleTouch('num-241')">241</div>
+            <div class="num-tile" onclick="handleTouch('num-242')">242</div>
+            <div class="num-tile" onclick="handleTouch('num-243')">243</div>
+            <div class="num-tile" onclick="handleTouch('num-244')">244</div>
+
+            <!-- 311 - 344 -->
+            <div class="num-tile" onclick="handleTouch('num-311')">311</div>
+            <div class="num-tile" onclick="handleTouch('num-312')">312</div>
+            <div class="num-tile" onclick="handleTouch('num-313')">313</div>
+            <div class="num-tile" onclick="handleTouch('num-314')">314</div>
+            <div class="num-tile" onclick="handleTouch('num-321')">321</div>
+            <div class="num-tile" onclick="handleTouch('num-322')">322</div>
+            <div class="num-tile" onclick="handleTouch('num-323')">323</div>
+            <div class="num-tile" onclick="handleTouch('num-324')">324</div>
+            <div class="num-tile" onclick="handleTouch('num-331')">331</div>
+            <div class="num-tile" onclick="handleTouch('num-332')">332</div>
+            <div class="num-tile" onclick="handleTouch('num-333')">333</div>
+            <div class="num-tile" onclick="handleTouch('num-334')">334</div>
+            <div class="num-tile" onclick="handleTouch('num-341')">341</div>
+            <div class="num-tile" onclick="handleTouch('num-342')">342</div>
+            <div class="num-tile" onclick="handleTouch('num-343')">343</div>
+            <div class="num-tile" onclick="handleTouch('num-344')">344</div>
+
+            <!-- 411 - 444 -->
+            <div class="num-tile" onclick="handleTouch('num-411')">411</div>
+            <div class="num-tile" onclick="handleTouch('num-412')">412</div>
+            <div class="num-tile" onclick="handleTouch('num-413')">413</div>
+            <div class="num-tile" onclick="handleTouch('num-414')">414</div>
+            <div class="num-tile" onclick="handleTouch('num-421')">421</div>
+            <div class="num-tile" onclick="handleTouch('num-422')">422</div>
+            <div class="num-tile" onclick="handleTouch('num-423')">423</div>
+            <div class="num-tile" onclick="handleTouch('num-424')">424</div>
+            <div class="num-tile" onclick="handleTouch('num-431')">431</div>
+            <div class="num-tile" onclick="handleTouch('num-432')">432</div>
+            <div class="num-tile" onclick="handleTouch('num-433')">433</div>
+            <div class="num-tile" onclick="handleTouch('num-434')">434</div>
+            <div class="num-tile" onclick="handleTouch('num-441')">441</div>
+            <div class="num-tile" onclick="handleTouch('num-442')">442</div>
+            <div class="num-tile" onclick="handleTouch('num-443')">443</div>
+            <div class="num-tile" onclick="handleTouch('num-444')">444</div>
+        </div>
+    </div>
+
+    <!-- 64 எண்களுக்கான முழுப் பாடல்கள் மற்றும் பலன்கள் -->
+    <div class="results-section">
+
+        <!-- 111 -->
+        <div class="result-card" id="num-111">
+            <div class="card-header">
+                <span class="card-number">எண்: 111</span>
+                <div class="btn-group">
+                    <button class="voice-btn" onclick="speakResult('num-111')">🔊 மீண்டும் கேள்</button>
+                    <button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button>
+                    <a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a>
+                </div>
+            </div>
+            <div class="song-box">அறிவே நூற்றுப்பதினொன்றைத் தொட்டதாய், அப்பனே கேட்குமொரு சேதிகேளு. குறைவின்றி காரியங்கள் ஜெயமேயாகும், கொற்றவனே ஒருவரும் குறைவேயில்லை.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> எந்தக் குறையுமின்றி நினைத்த காரியங்கள் அனைத்தும் ஜெயமேயாகும். எதிர்ப்பவர் எவரும் உங்களுக்கு ஈடாக முடியாது.</div>
+        </div>
+
+        <!-- 112 -->
+        <div class="result-card" id="num-112">
+            <div class="card-header">
+                <span class="card-number">எண்: 112</span>
+                <div class="btn-group">
+                    <button class="voice-btn" onclick="speakResult('num-112')">🔊 மீண்டும் கேள்</button>
+                    <button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button>
+                    <a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a>
+                </div>
+            </div>
+            <div class="song-box">நன்மையுற்ற யோசனை மனதிலெண்ணி, நாட்டமாய் நூற்றுப்பன்னிரெண்டைத் தொட்டாய். உன்னுடைய மனம்போலே முடியுமப்பா, தாராளமாய் தேவதைக்கு பூசைபோடு.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> மனதில் எண்ணிய நன்னோக்கம் நிறைவேறும். குலதெய்வம் அல்லது காவல் தெய்வத்திற்கு வழிபாடு செய்தால் மிக விரைவில் நடக்கும்.</div>
+        </div>
+
+        <!-- 113 -->
+        <div class="result-card" id="num-113">
+            <div class="card-header"><span class="card-number">எண்: 113</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-113')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">கோப்பா நூற்றுப்பதின்மூன்றைத் தொட்டாய், கண்மணியே கேட்குமொரு சேதிகேளு. தனலாபங்குறையில்லை மிகவேயுண்டு, கிருபையாய் குழுவினியுங் காப்பாய்தானே.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> கோபத்தைத் தணித்து நிதானத்தைக் கடைப்பிடித்தால் துன்பங்கள் விலகும். தனலாபம் சிறப்பாக இருக்கும்.</div>
+        </div>
+
+        <!-- 114 -->
+        <div class="result-card" id="num-114">
+            <div class="card-header"><span class="card-number">எண்: 114</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-114')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">மைந்தனே நூற்றுப் பதினானாலெத்தொடட்டாய், மகாரத்ன வருத்தமது விலகிப்போச்சு. சிந்தையது களித்திடுவாய் லாபமுண்டு, சீமானே போராமல் உதவிசெய்வார்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> மனதிலிருந்த பெரிய கவலைகளும் வருத்தங்களும் விலகிவிட்டன. லாபமும், நண்பர்கள் உதவியும் உடனே கிடைக்கும்.</div>
+        </div>
+
+        <!-- 121 -->
+        <div class="result-card" id="num-121">
+            <div class="card-header"><span class="card-number">எண்: 121</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-121')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">தொட்டதொரு லக்கத்தின் விவரங்கேளு, தொலையாதென மனவருத்தம் விலகிப்போச்சு. இஷ்டதெய்வத்தை பூசைபோடு, நஷ்டமில்லை வியாபாரம் பலிக்கும்ப்பா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> நீண்ட நாளைய மனவருத்தம் நீங்கும். இஷ்ட தெய்வ வழிபாட்டைச் செய்தால் தொழிலில் அதிக லாபம் பெறலாம்.</div>
+        </div>
+
+        <!-- 122 -->
+        <div class="result-card" id="num-122">
+            <div class="card-header"><span class="card-number">எண்: 122</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-122')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">நூாற்றுடனே யிருபத்து ரெண்டினைத் தொட்டாய், நம்பியதோர் வியாபாரம் வலுத்துமாகும். தோற்றொரு பொருளெல்லாம் வந்துசேரும், துணையென்று ஒருவரையும் நம்பவேண்டாம்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> தொழில் சிறக்கும்; இழந்த பொருட்கள் மீண்டும் கைகூடும். மற்றவர்களைக் கண்மூடித்தனமாக நம்பக் கூடாது.</div>
+        </div>
+
+        <!-- 123 -->
+        <div class="result-card" id="num-123">
+            <div class="card-header"><span class="card-number">எண்: 123</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-123')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">துன்பமதனை விட்டு விலகிப்போச்சு, தொடட்டதொறுகுறியினிலே நன்மையாமே. துலையிலிருந்து செய்தி வருமப்பொழுதே.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> உங்களைச் சூழ்ந்த துன்பங்கள் அனைத்தும் விலகும். தூர தேசத்திலிருந்து நல்ல செய்திகள் வந்து சேரும்.</div>
+        </div>
+
+        <!-- 124 -->
+        <div class="result-card" id="num-124">
+            <div class="card-header"><span class="card-number">எண்: 124</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-124')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">அஞ்சாதே தொட்டொரு குறியைக்கேளு, அப்பனே யினியொரு குறைவேயில்லை. வஞ்சனெஞ்ச பகையாவார் உறவுமாவார், வந்தப்பொன் பொருளுந்தான் வந்துசேரும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> அஞ்சத் தேவையில்லை. பகையாக இருந்தவர்கள் நண்பர்களாக மாறுவார்கள். கைவிட்டுப் போன பணம் வந்து சேரும்.</div>
+        </div>
+
+        <!-- 131 -->
+        <div class="result-card" id="num-131">
+            <div class="card-header"><span class="card-number">எண்: 131</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-131')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">தொட்டதி நூற்றுமுப்பத் தொன்றாகுமே, தோஷமில்லை யெண்ணமது முடிப்பாயப்பா. சிவ பூஜையைச்செய், வெகுநாளாய் நினைத்ததொட்டீ டேறவேண்டாம்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> எவ்வித தோஷமும் இல்லை. சிவ வழிபாடு செய்து வந்தால் நிலுவையில் இருந்த காரியம் முடியும்.</div>
+        </div>
+
+        <!-- 132 -->
+        <div class="result-card" id="num-132">
+            <div class="card-header"><span class="card-number">எண்: 132</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-132')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">மத்திபம் நூற்று முப்பத்திரண்டில், மனவருத்தும் தொட்டடக் களிப்புண்டாகும். சித்தமும் கலக்கமாய் விரித்தியாகும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> இந்த எண் மத்திமப் பலனைத் தரும். மனதில் கலக்கமும், வியாபாரத்தில் சிறு சிறு கவனமும் தேவை.</div>
+        </div>
+
+        <!-- 133 -->
+        <div class="result-card" id="num-133">
+            <div class="card-header"><span class="card-number">எண்: 133</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-133')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">காணவே நூற்றுமுப்பத்து மூன்று, கண்மணியே தொட்டதினால் நன்மையுண்டு. வேணவே பெரியோரா உதவிபுரியாகும், வருகுமொரு செய்தியினீ வெல்வாயப்பா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> நிச்சயம் நன்மையுண்டு. பெரியோர்களின் வழிகாட்டுதலும் உதவியும் கிடைக்கும். நினைத்த காரியம் நடக்கும்.</div>
+        </div>
+
+        <!-- 134 -->
+        <div class="result-card" id="num-134">
+            <div class="card-header"><span class="card-number">எண்: 134</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-134')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">அறிவே நூற்றுமுப்பத்து நான்காவது, அப்பனே தொட்டதொரு செய்திதனை. தெரியவே வியாபாரம் வர்த்திதாகும், பிடைநீங்கும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> வியாபாரம் மற்றும் தொழில் விருத்தியாகும். கடன் மற்றும் நோய்ப் பிணிகள் விலகிப்போகும். சுபச் செய்திகள் வரும்.</div>
+        </div>
+
+        <!-- 141 -->
+        <div class="result-card" id="num-141">
+            <div class="card-header"><span class="card-number">எண்: 141</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-141')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">என்னினைந்த விகவநம்து கூடும்பப்பா, இலையியே நீதொட்ட குறியினாலே. பண்ணவே வாயம்பரும் கவலைய வேண்டாம், பகையாயின அண்ணன் தம்பி உறவாவார்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> நினைத்த காரியம் கைகூடும். குடும்பத்தில் பிரிந்திருந்த சகோதரர்களும் உறவினர்களும் ஒன்று சேர்வார்கள்.</div>
+        </div>
+
+        <!-- 142 -->
+        <div class="result-card" id="num-142">
+            <div class="card-header"><span class="card-number">எண்: 142</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-142')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">சீரக தொட்டகுறி செய்திதேளு, செல்வமது பெருகுமடா விவாகங்க கூடும். தேராமல் வாழ்ந்திடுவாய் துணிவாயீயும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> செல்வம் பெருகும், விவாகம் கைகூடும். ஆனால் மற்றவர்களை நம்பி மீண்டும் மோசம் போகக் கூடாது.</div>
+        </div>
+
+        <!-- 143 -->
+        <div class="result-card" id="num-143">
+            <div class="card-header"><span class="card-number">எண்: 143</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-143')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">நூற்றுநாற்பத்துமூன்றைத் தொட்டதால், தேற்றிடும் பொருளுஞ் சேரும் தர்மவான் சிநேகமாவான். ஆத்திரப்படவேண்டாம் அம்மனைப் பூசைசெய்யே.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> பொருள் சேரும்; நல்ல மனிதர்களின் நட்பு கிடைக்கும். ஆத்திரப்படாமல் அம்மனை பூஜை செய்து வந்தால் வெற்றி ஜெயமாகும்.</div>
+        </div>
+
+        <!-- 144 -->
+        <div class="result-card" id="num-144">
+            <div class="card-header"><span class="card-number">எண்: 144</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-144')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">கண்மணியே நூற்றுநாற்பத்திநான்கை, கருதுடனே தொட்டதினால் வருத்தமில்லை. பண்ணவே பெரியோரால் உதவியுண்டு, பலனான உத்தியோகங் கிடைக்கும்ப்பா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> எவ்வித வருத்தமும் இல்லை. உத்தியோக உயர்வு அல்லது புதிய வேலை கிடைக்கும். எடுக்கும் முயற்சிகள் பலிக்கும்.</div>
+        </div>
+
+        <!-- 211 -->
+        <div class="result-card" id="num-211">
+            <div class="card-header"><span class="card-number">எண்: 211</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-211')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">சித்தத்தில் நினைத்ததொரு எண்ணங்கூடும், ஜெயமுமாகும் குடும்பமு விரித்தியூடே. புத்திரக்கூடிபெருவாய் பொருளுஞ்சேரும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> நினைத்த எண்ணம் ஈடேறும். குடும்பம் விருத்தியாகும், தனலாபமும் குழந்தை பாக்கியமும் உண்டாகும்.</div>
+        </div>
+
+        <!-- 212 -->
+        <div class="result-card" id="num-212">
+            <div class="card-header"><span class="card-number">எண்: 212</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-212')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">மண்ணவனே தொட்ட லக்கந்தாலே, மனவருத்தம் சீக்கிரத்தில் தீரும்பா. சொன்னபடி பொருள்சேரும் குடும்பவர்த்தி.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> மனவருத்தம் சீக்கிரத்தில் அகலும். சொத்து மற்றும் குடும்ப விஷயங்களில் சுப பலன்கள் நடக்கும்.</div>
+        </div>
+
+        <!-- 213 -->
+        <div class="result-card" id="num-213">
+            <div class="card-header"><span class="card-number">எண்: 213</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-213')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">இருநூற்று பதின்மூன்றைத் தொட்டதாலே, எந்ததொழிலைச் செய்தாலும் அதிகலாபம். உறவுப்பொருளுண்டு வெளியூரில் கிடைக்கும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> தொழிலில் அதிக லாபம் கிடைக்கும். வெளியூர் மூலம் ஆதாயம் உண்டு.</div>
+        </div>
+
+        <!-- 214 -->
+        <div class="result-card" id="num-214">
+            <div class="card-header"><span class="card-number">எண்: 214</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-214')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">இருநூற்று பதினான்கைத் தொட்டதாலே, எவ்வளவு வருத்தம்ப்பட்டாய். குறையின்றி கேட்டநாள் தொடங்கிடப்பா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> பட்ட துன்பங்கள் விலகிவிட்டன. தொட்ட தொழில் அனைத்தும் சிறப்பான பலனைத் தரும்.</div>
+        </div>
+
+        <!-- 221 -->
+        <div class="result-card" id="num-221">
+            <div class="card-header"><span class="card-number">எண்: 221</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-221')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">மண்டலத்தில் தொடுகுறியின் மர்மங்கேளாய், மர்மமாய் நினைத்தபொருள் முடியாதுப்பா. விண்டதப்பா செய்தொழிலும் கவனமாய் செய்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> ரகசியமாக நினைத்த காரியங்கள் உடனடியாக முடியாது. பொறுமையோடு செயல்பட வேண்டும்.</div>
+        </div>
+
+        <!-- 222 -->
+        <div class="result-card" id="num-222">
+            <div class="card-header"><span class="card-number">எண்: 222</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-222')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">தொட்டதோர் குறியினாலே பயமும் வேண்டாம், மட்டிலுந்தொழிலினாலே மகிழ்பாயா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> தேவையில்லாத சேர்க்கைகளுக்கும் வீண் பேச்சுக்களுக்கும் விலகி இருப்பது நல்லது.</div>
+        </div>
+
+        <!-- 223 -->
+        <div class="result-card" id="num-223">
+            <div class="card-header"><span class="card-number">எண்: 223</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-223')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">தொட்டதோர் குறியினாலே துலைந்தது துன்பமெல்லாம், விட்டது கிரகமெல்லாம் வந்தது நல்லகாலம். சட்டென பதறவேண்டாம் சகலமு கைக்கூடும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> துன்பங்கள் விலகி, நல்ல காலம் பிறந்துவிட்டது. அவசரப்படாமல் நிதானமாகச் செயல்பட வேண்டும்.</div>
+        </div>
+
+        <!-- 224 -->
+        <div class="result-card" id="num-224">
+            <div class="card-header"><span class="card-number">எண்: 224</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-224')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">எண்ணியே தொட்டலக்கம் எடுத்ததோர் வேலையாகியும், நன்னியி லொருவருக்கு நல்லுபகாரஞ்செய்ய.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> பிறருக்கு உதவி செய்து நற்பெயர் எடுப்பீர்கள். தொழில் மற்றும் காரியங்களில் வெற்றி நிச்சயம்.</div>
+        </div>
+
+        <!-- 231 -->
+        <div class="result-card" id="num-231">
+            <div class="card-header"><span class="card-number">எண்: 231</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-231')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">பலித்தது தொட்டலக்கம் பகையது தொலைந்துபோச்சு, கெலித்தது நினைத்தவேலை கொஞ்சநாள் கழித்துக்கூடும். சலித்திட வேண்டாமயா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> பகைவர்கள் அஞ்சி ஓடுவார்கள். நினைத்த வேலை சில நாட்கள் கழித்து நடக்கும். சலிப்படையத் தேவையில்லை.</div>
+        </div>
+
+        <!-- 232 -->
+        <div class="result-card" id="num-232">
+            <div class="card-header"><span class="card-number">எண்: 232</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-232')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">எடுத்ததோர் பொருளுந்தாயும், பக்கமுளன் வீட்டில் பலித்தது திரளுமிகவுண்டாகும். சிக்கென வாழ்ந்தாயானால் செல்வமும் பெருகுமென்றார்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> தொலைந்து போன பொருட்கள் கைக்குக் கிடைக்கும். வீட்டில் செல்வம் பெருகி யோகம் உண்டாகும்.</div>
+        </div>
+
+        <!-- 233 -->
+        <div class="result-card" id="num-233">
+            <div class="card-header"><span class="card-number">எண்: 233</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-233')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">அறிந்தொரு நீதொட்ட குறியின்வண்ணமே, அட்டதுப்பா வுன்மனதில் விசனமொன்று. தெரிந்துருவாய் வெளியூரின் நன்மையுண்டு.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> கவலைகள் அகலும். வெளியூர் தொடர்புகள் மூலம் நன்மை உண்டாகும்.</div>
+        </div>
+
+        <!-- 234 -->
+        <div class="result-card" id="num-234">
+            <div class="card-header"><span class="card-number">எண்: 234</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-234')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">ஜெயமதுபலித்துபோச்சு சித்தங்குலங்க வேண்டாம், தயவது உள்ளோனா நல்ல தர்மவான் சிநேகமாவான்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> வெற்றி நிச்சயமாகும்; மனதை அலைபாய விட வேண்டாம். நல்ல மனிதர்களின் ஆதரவும் நட்பும் கிடைக்கும்.</div>
+        </div>
+
+        <!-- 241 -->
+        <div class="result-card" id="num-241">
+            <div class="card-header"><span class="card-number">எண்: 241</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-241')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">கேளப்பா தொட்டதொரு குறிமுச்சைச்சொல்வேன், விவாகத்தின் விசனமொன்று அகலும்ப்பா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> திருமணம் மற்றும் குடும்பம் சார்ந்த கவலைகள் அகலும். பொறாமைப்படும் நபர்களை விலக்க வேண்டும்.</div>
+        </div>
+
+        <!-- 242 -->
+        <div class="result-card" id="num-242">
+            <div class="card-header"><span class="card-number">எண்: 242</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-242')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">குறைவது மில்லையென்று கூறிய மொழியை நம்பு, பெருமையாய் விட்டுடே சொன்ன பேச்சமு முடியுமப்பா.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> கவலைகள் நீங்கும். கொடுத்த வாக்குறுதியைக் காப்பாற்றுவீர்கள்.</div>
+        </div>
+
+        <!-- 243 -->
+        <div class="result-card" id="num-243">
+            <div class="card-header"><span class="card-number">எண்: 243</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-243')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">இருநூற்று நாற்பத்தி மூன்றைத் தொட்டாய், எந்த தொழிலைச் செய்தாலும் பலிக்கும்பா. தருணத்தில் தனலாபம் தோற்றோய்க்கும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> எந்த தொழில் செய்தாலும் லாபம் தரும். வேலைவாய்ப்பும் புத்திர பாக்கியமும் தடையின்றிப் பலிக்கும்.</div>
+        </div>
+
+        <!-- 244 -->
+        <div class="result-card" id="num-244">
+            <div class="card-header"><span class="card-number">எண்: 244</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-244')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div>
+            <div class="song-box">சித்தமது கலங்காதே அப்பேககேளு, உத்தமின கிரகங்கள் பலனைக் கூட்டும்.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> நவகிரகங்கள் சாதகமாக உள்ளன; செல்வம் பெருகும். துரோகம் செய்யும் போலிகளைத் தூக்கி எறிய வேண்டும்.</div>
+        </div>
+
+        <!-- 311 - 444 வரையிலான மீதி பலன்கள் -->
+        <div class="result-card" id="num-311"><div class="card-header"><span class="card-number">எண்: 311</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-311')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நினைத்ததொரு என்னஞ்செய்யும், ஜெயமுமாகும் குடும்பமு விரித்தியூடே. புத்திரக்கூடிபெருவாய் பொருளுஞ்சேரும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> மனதில் நினைத்த திட்டம் வெற்றிபெறும். தன சேர்க்கையும் குடும்ப மேன்மையும் உண்டாகும்.</div></div>
+        <div class="result-card" id="num-312"><div class="card-header"><span class="card-number">எண்: 312</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-312')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">தொழில் விருத்தியாகும் நினைத்த காரியம் நிறைவேறும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> தொழிலில் நல்ல வளர்ச்சியைக் காண்பீர்கள். நிலுவையில் இருந்த காரியங்கள் முடிவுக்கு வரும்.</div></div>
+        <div class="result-card" id="num-313"><div class="card-header"><span class="card-number">எண்: 313</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-313')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">தெய்வ வழிபாட்டால் நன்மை உண்டாகும், பயம் விலகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> குலதெய்வம் மற்றும் இஷ்ட தெய்வ வழிபாடுகள் உங்களின் பயத்தைப் போக்கி வெற்றியைத் தரும்.</div></div>
+        <div class="result-card" id="num-314"><div class="card-header"><span class="card-number">எண்: 314</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-314')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">உத்தியோகத்தில் மேன்மை, சுபச் செய்திகள் வந்து சேரும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> வேலையில் இருப்பவர்களுக்குப் பதவி உயர்வு, சம்பள உயர்வு அல்லது நல்ல மாற்றங்கள் வரும்.</div></div>
+        <div class="result-card" id="num-321"><div class="card-header"><span class="card-number">எண்: 321</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-321')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">தொட்ட காரியம் சித்தியாகும், நன்மை பெருகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கை வைக்கும் காரியம் எதுவானாலும் வெற்றி உங்களைத் தேடி வரும்.</div></div>
+        <div class="result-card" id="num-322"><div class="card-header"><span class="card-number">எண்: 322</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-322')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">தனலாபம் கிடைக்கும், தொழில் விருத்தியாகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> பொருளாதார நெருக்கடிகள் அகன்று, வியாபாரத்தில் நல்ல லாபம் கிடைக்கும்.</div></div>
+        <div class="result-card" id="num-323"><div class="card-header"><span class="card-number">எண்: 323</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-323')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நினைத்த காரியம் ஜெயமாகும், மனமகிழ்ச்சி உண்டாகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> மனதில் நினைத்த ஆசைகளும் விருப்பங்களும் நிறைவேறி மகிழ்ச்சி அடைவீர்கள்.</div></div>
+        <div class="result-card" id="num-324"><div class="card-header"><span class="card-number">எண்: 324</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-324')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">துன்பங்கள் நீங்கும், எடுத்த காரியத்தில் வெற்றி கிடைக்கும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> ஆட்டிப்படைத்த துன்பங்கள் நீங்கி, செயலில் வெற்றி கிடைக்கும்.</div></div>
+        <div class="result-card" id="num-331"><div class="card-header"><span class="card-number">எண்: 331</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-331')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நாடியே தொட்டலக்கம் நன்னீயெனச் சாயும், கூடிய லாபமாகும் குடும்பமும் வர்த்தியாகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> தொழிலில் லாபமும் குடும்பத்தில் மகிழ்ச்சியும் பெருகும். தர்ம காரியங்கள் மேன்மையைத் தரும்.</div></div>
+        <div class="result-card" id="num-332"><div class="card-header"><span class="card-number">எண்: 332</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-332')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">எண்ணமு முடியாது மெத்தநாளும் பலித்திடாது, கடந்த காலக் கஷ்டங்கள் விரைவில் அகலும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> சில காரியங்கள் கொஞ்சம் தாமதமாகும். கடந்த காலக் கஷ்டங்கள் விரைவில் அகலும்.</div></div>
+        <div class="result-card" id="num-333"><div class="card-header"><span class="card-number">எண்: 333</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-333')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நினைத்ததோர் வேலையாவும் நம்பி நீ தொட்டலக்கம், கடவுளின் கிருபையாலே கை கூடும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கடவுளின் கிருபையாலும் குலதெய்வ பூஜையாலும் காரியங்கள் அனைத்தும் கை கூடிவரும்.</div></div>
+        <div class="result-card" id="num-334"><div class="card-header"><span class="card-number">எண்: 334</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-334')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">பற்றல எண்ண வேண்டாம் பாலா நீ தொட்டலக்கம், சக்கல வேலையாய் கைதனினில் வந்து கூடும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> பெரியோர்களின் ஆதரவால் நினைத்த காரியம் சித்தியாகும்.</div></div>
+        <div class="result-card" id="num-341"><div class="card-header"><span class="card-number">எண்: 341</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-341')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">உன்னிடை மனதிலமெத்த உருகு விசனமொன்று, சிவபெருமானைத் தியானிப்பது நல்லது.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> மன உளைச்சல் மற்றும் பிணிகள் விலக சிவபெருமானைத் தியானிப்பது நல்லது. புத்திர பாக்கியம் உண்டாகும்.</div></div>
+        <div class="result-card" id="num-342"><div class="card-header"><span class="card-number">எண்: 342</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-342')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நினைத்ததோ ரென்னஞ்சாயும் நம்பிடு மேற்குத்திக்கில், தனத்துடன் லாபங்காணும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> மேற்கு திசை சார்ந்த பிரயாணங்கள் மூலம் தனலாபம் கிடைக்கும். கவலைகள் நீங்கும்.</div></div>
+        <div class="result-card" id="num-343"><div class="card-header"><span class="card-number">எண்: 343</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-343')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">கோபஞ் சண்டைகொண்டு கூடியபொருளைத் தோற்றாய், இனி வரும் மாதங்களில் லாபம் வரும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கோபத்தால் இழப்புகளைச் சந்தித்திருந்தாலும், இனி வரும் மாதங்களில் இழப்புகள் ஈடுகட்டப்பட்டு லாபம் வரும்.</div></div>
+        <div class="result-card" id="num-344"><div class="card-header"><span class="card-number">எண்: 344</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-344')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">எண்ணமும் பலிக்குமப்பா எத்தொழில பாலன்காணும், மனைவியால் வாழ்வே யோகமாகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கைவிட்டுப் போன பொருட்கள் மீண்டும் கிடைக்கும். மனைவியால் வாழ்வில் யோகமும் நன்மையும் உண்டாகும்.</div></div>
+        <div class="result-card" id="num-411"><div class="card-header"><span class="card-number">எண்: 411</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-411')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">கஷ்டமுமிகவேதோனுங் காண்பது நிராசையாகும், குலதெய்வத்திற்குப் பூஜை செய்ய வேண்டும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கஷ்டங்களும் தோஷங்களும் விலகக் குலதெய்வத்திற்குப் பூஜை செய்ய வேண்டும்.</div></div>
+        <div class="result-card" id="num-412"><div class="card-header"><span class="card-number">எண்: 412</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-412')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">கவலைகளும் படுகிறாய் நீ, இன்னமுஞ் சிலநாள் போனால் இஷ்டத்தின்படியே கூடும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கவலைகள் தற்காலிகமானவை. இன்னும் சில நாட்களில் நினைத்த காரியம் விருப்பப்படியே நடக்கும்.</div></div>
+        <div class="result-card" id="num-413"><div class="card-header"><span class="card-number">எண்: 413</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-413')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நித்தமும் பணத்தினை எண்ணியுன் மனதிலவாட்டும், உத்தம ஸ்திரீயினாலே உதவியாய் பொருளுஞ்சேரும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> பணப் பற்றாக்குறை நீங்கும். நல்ல பெண்ணின் உதவியால் பொருளும் தனமும் வந்து சேரும்.</div></div>
+        <div class="result-card" id="num-414"><div class="card-header"><span class="card-number">எண்: 414</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-414')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">பட்டடன் துன்பந்தனை பகிர்ந்திட முடியாதுப்பா, தொட்டதோர் கிரகம்போச்சு துணையது இனிமேலாச்சு.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> துன்பங்கள் முடிவுக்கு வந்துவிட்டன. நினைத்த ஆசை ஒரே மாதத்தில் நிறைவேறும்.</div></div>
+        <div class="result-card" id="num-421"><div class="card-header"><span class="card-number">எண்: 421</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-421')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">பொருளது கைவிட்டே புலம்பி வருகின்றாய், அருளன் வந்துசேரும் அயலாரில் பலனைக்காட்டும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கைவிட்டுப் போன பணம் புதிய வழிகளில் மீண்டும் கிடைக்கும்.</div></div>
+        <div class="result-card" id="num-422"><div class="card-header"><span class="card-number">எண்: 422</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-422')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">சென்றதோர் வருமுன் னுறு சிறுமையால் மெய்தாதாகும், இன்னுடன் பிடயெல்லாம் ஒழிந்திடும் பயப்படாதே.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> முந்தைய கஷ்டங்கள் விலகிவிட்டன. அஞ்சாமல் எடுக்கும் காரியங்களைச் செய்யலாம்.</div></div>
+        <div class="result-card" id="num-423"><div class="card-header"><span class="card-number">எண்: 423</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-423')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">குறைவுதில்லை சொன்னேன் கொண்டதோ ரென்னஞ்சாயும், பெறுகுவாதி கவாடம் பின்னென பயமும்வேண்டாம்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> எந்தத் தொழில் செய்தாலும் அதில் அதிக லாபமும் மேன்மையும் கிடைக்கும்.</div></div>
+        <div class="result-card" id="num-424"><div class="card-header"><span class="card-number">எண்: 424</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-424')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">ஏமாற்றங்களும் குடும்பச் சிக்கல்களும் அகலும், இனி நன்மைகள் பெருகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> ஏமாற்றங்களும் குடும்பச் சிக்கல்களும் அகலும். இனி நன்மைகள் பெருகும்.</div></div>
+        <div class="result-card" id="num-431"><div class="card-header"><span class="card-number">எண்: 431</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-431')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">பாலனே பயப்படாதே பலித்திடும் நினைத்தவேலை, மேலென அன்னதானம்பண்ணி மகிழுடன் கூடுவாய்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> பயப்படத் தேவையில்லை; நினைத்த வேலை முடியும். அன்னதானம் செய்வது நன்மை தரும்.</div></div>
+        <div class="result-card" id="num-432"><div class="card-header"><span class="card-number">எண்: 432</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-432')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">மனதினில் நினைத்தவேலை மகிழுடன் வந்தகூடும், கணமுமே வெளியூர்போக கருத்தினிலென்னங்கொண்டாய்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> வெளியூர் பிரயாணங்கள் வெற்றி தரும். பயத்தைத் துறந்து துணிச்சலாகச் செயல்படலாம்.</div></div>
+        <div class="result-card" id="num-433"><div class="card-header"><span class="card-number">எண்: 433</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-433')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">சங்கைபுல்லசொன்னேன் சகலமு கைதூன்கூடும், மங்களமாக வாழ்வாய் மற்றொரு நேதாராலே.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> புகழும் மரியாதையும் தேடி வரும். குடும்பத்தில் சுப நிகழ்ச்சிகள் நடக்கும்.</div></div>
+        <div class="result-card" id="num-434"><div class="card-header"><span class="card-number">எண்: 434</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-434')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நமது கூட்டுவேலை கஷ்டமும் விலகிப்போச்சு, துய்யனே உன துயீட்டு துயரமு இனிமேலில்லை.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> கூட்டுத் தொழில் அல்லது கூட்டு முயற்சிகளில் இருந்த சிக்கல்கள் விலகி லாபம் உண்டாகும்.</div></div>
+        <div class="result-card" id="num-441"><div class="card-header"><span class="card-number">எண்: 441</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-441')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">கிரகமும் பொல்லாதப்பா கவலையு மிகவும்உண்டாகும், பிரியாயத் தேடினவுன் பொருளது விலகிப்போச்சு.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> தேடிய பொருள் தற்காலிகமாக விலகினாலும், விடாமுயற்சியால் மீண்டும் பெறலாம்.</div></div>
+        <div class="result-card" id="num-442"><div class="card-header"><span class="card-number">எண்: 442</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-442')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">நலியென்னும் பின்னுன் மெய்யில் நாளேன்மயனவாட்டும், சலியாமல் நீசெய்த தர்மம் சகலமும் நன்மையாகும்.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> ஆரோக்கியத்தில் கவனம் தேவை. நீங்கள் செய்யும் தர்மமும் தெய்வ வழிபாடும் நோய்களைப் போக்கும்.</div></div>
+        <div class="result-card" id="num-443"><div class="card-header"><span class="card-number">எண்: 443</span><div class="btn-group"><button class="voice-btn" onclick="speakResult('num-443')">🔊 மீண்டும் கேள்</button><button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button><a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a></div></div><div class="song-box">மூனுமுறு பலிக்கும் லாபம் முதலாளவன் கிருபையாலே, பின்னொரு பொருளும் நஷ்டம் பிறந்தீடு மஞ்சிடாதே.</div><div class="result-text"><strong>நேரடிப் பொருள்:</strong> இறைவனின் அருளால் தொழில் லாபகரமாகும். ஆரம்பத்தில் சிறு தட்டுப்பாடு இருந்தாலும் இறுதியில் சுபமாக முடியும்.</div></div>
+
+        <!-- 444 -->
+        <div class="result-card" id="num-444">
+            <div class="card-header">
+                <span class="card-number">எண்: 444</span>
+                <div class="btn-group">
+                    <button class="voice-btn" onclick="speakResult('num-444')">🔊 மீண்டும் கேள்</button>
+                    <button class="voice-btn" onclick="stopSpeech()">⏹️ நிறுத்து</button>
+                    <a href="#top" class="back-to-top" onclick="stopSpeech()">↑ பலகை</a>
+                </div>
+            </div>
+            <div class="song-box">ஜெயமுடனே எத்தொழிலும் பலிக்குமப்பா, சிந்தையிலே பயமென்ற கவலை நீங்கு. நம்பிபெருவாய் பந்தயுடன் கூடியவாழ்வு.</div>
+            <div class="result-text"><strong>நேரடிப் பொருள்:</strong> அனைத்துத் துறைகளிலும் பூரண வெற்றியும், தீர்க்காயுளும், சகல ஐஸ்வர்யங்களும் உண்டாகும்.</div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    let synth = window.speechSynthesis;
+    let selectedVoice = null;
+
+    // பிரவுசரில் உள்ள தமிழ் குரலை லோட் செய்யும் ஃபங்க்ஷன்
+    function loadVoices() {
+        let voices = synth.getVoices();
+        selectedVoice = voices.find(v => v.lang.includes('ta') || v.lang.includes('TA'));
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    // எண்களைத் தொடும்போது ஸ்க்ரோல் & வாய்ஸ் இயக்கும் ஃபங்க்ஷன்
+    function handleTouch(elementId) {
+        stopSpeech();
+
+        let targetElement = document.getElementById(elementId);
+        if (targetElement) {
+            // Smooth Scroll Animation
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // 400ms தாமதத்திற்குப் பின் பேசத் தொடங்கும் (ஸ்க்ரோல் ஆனவுடன் பேச)
+            setTimeout(() => {
+                speakResult(elementId);
+            }, 400);
+        }
+    }
+
+    function speakResult(cardId) {
+        stopSpeech();
+
+        let card = document.getElementById(cardId);
+        if (!card) return;
+
+        let songText = card.querySelector('.song-box').innerText;
+        let mainText = card.querySelector('.result-text').innerText;
+
+        let fullText = "எண் " + cardId.replace('num-', '') + " பலன். " + songText + ". " + mainText;
+
+        let utterance = new SpeechSynthesisUtterance(fullText);
+        utterance.lang = 'ta-IN';
+        utterance.rate = 0.85; // இயல்பான வாசிப்பு வேகம்
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        synth.speak(utterance);
+    }
+
+    function stopSpeech() {
+        if (synth.speaking || synth.pending) {
+            synth.cancel();
+        }
+    }
+</script>
+
+</body>
+</html>
