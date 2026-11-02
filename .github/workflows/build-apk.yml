@@ -126,8 +126,11 @@ jobs:
 
       - name: 4. Install Android SDK API 37 and Build Tools 36.0.0
         uses: android-actions/setup-android@v3
-
-      - name: 5. Install required Android SDK components
+        with:
+    packages: 'platform-tools'
+    
+    
+    - name: 5. Install required Android SDK components
         shell: bash
         run: |
           set -euo pipefail
