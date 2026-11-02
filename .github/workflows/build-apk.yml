@@ -7,9 +7,6 @@ on:
       - '*.zip'
       - '**/*.zip'
       - '.github/workflows/build-apk.yml'
-      - '.github/workflows/build-apk.yaml'
-      - '.github/workflows/android-build.yml'
-      - '.github/workflows/android-build.yaml'
 
 permissions:
   contents: write
