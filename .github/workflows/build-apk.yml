@@ -7,6 +7,9 @@ on:
       - '*.zip'
       - '**/*.zip'
       - '.github/workflows/build-apk.yml'
+      - '.github/workflows/build-apk.yaml'
+      - '.github/workflows/android-build.yml'
+      - '.github/workflows/android-build.yaml'
 
 permissions:
   contents: write
@@ -17,15 +20,15 @@ concurrency:
 
 jobs:
   build-apk:
-    name: Extract Android Project and Build Debug APK
+    name: Find ZIP, detect Android project, and build APK
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
 
     steps:
       - name: 1. Checkout repository
         uses: actions/checkout@v4
 
-      - name: 2. Safely extract ZIP and detect Android project root
+      - name: 2. Find ZIP anywhere in repository and detect project root
         id: detect
         shell: bash
         run: |
@@ -37,23 +40,43 @@ jobs:
           from pathlib import Path, PurePosixPath
 
           workspace = Path(os.environ["GITHUB_WORKSPACE"]).resolve()
-          extract_dir = Path(os.environ["RUNNER_TEMP"]) / "lucky-dangle-extracted"
+          runner_temp = Path(os.environ["RUNNER_TEMP"])
+          extract_dir = runner_temp / "lucky-dangle-extracted"
           if extract_dir.exists():
               shutil.rmtree(extract_dir)
           extract_dir.mkdir(parents=True)
 
-          # One ZIP upload is expected in the repository root.
-          archives = sorted(p for p in workspace.glob("*.zip") if p.is_file())
-          if len(archives) != 1:
+          # Search recursively, not just in the repository root.
+          ignored = {".git", ".gradle", "build", "node_modules"}
+          archives = sorted(
+              p for p in workspace.rglob("*")
+              if p.is_file()
+              and p.suffix.lower() == ".zip"
+              and not any(part in ignored for part in p.relative_to(workspace).parts)
+          )
+
+          print("Repository ZIP files found:")
+          for item in archives:
+              print(f" - {item.relative_to(workspace)}")
+
+          if len(archives) == 0:
+              print("Repository root entries:")
+              for item in sorted(workspace.iterdir()):
+                  print(f" - {item.name}{'/' if item.is_dir() else ''}")
               raise SystemExit(
-                  "Expected exactly one ZIP file in the repository root; "
-                  f"found {len(archives)}: {[p.name for p in archives]}"
+                  "ERROR: No ZIP file exists in the checked-out repository. "
+                  "Upload and COMMIT the ZIP file to GitHub, then rerun the workflow."
+              )
+          if len(archives) > 1:
+              raise SystemExit(
+                  "ERROR: More than one ZIP file was found. Keep only the one package ZIP "
+                  "for this build, or remove the old ZIP from the repository."
               )
 
           archive = archives[0]
-          print(f"ZIP found: {archive.name}")
+          print(f"Selected ZIP: {archive.relative_to(workspace)}")
 
-          # Reject unsafe paths before extracting archive contents.
+          # Validate all archive paths before extracting.
           with zipfile.ZipFile(archive) as zf:
               for info in zf.infolist():
                   name = info.filename.replace("\\", "/")
@@ -65,22 +88,25 @@ jobs:
                       raise SystemExit(f"ZIP entry escapes extraction folder: {info.filename}")
               zf.extractall(extract_dir)
 
-          # Find the real project root, even if it is several folders deep.
+          print("ZIP extraction completed. Searching for Android project files...")
           candidates = []
-          for settings_file in list(extract_dir.rglob("settings.gradle.kts")) + list(extract_dir.rglob("settings.gradle")):
+          settings_files = list(extract_dir.rglob("settings.gradle.kts"))
+          settings_files += list(extract_dir.rglob("settings.gradle"))
+          for settings_file in settings_files:
               root = settings_file.parent
-              app_gradle = root / "app" / "build.gradle.kts"
-              app_gradle_groovy = root / "app" / "build.gradle"
-              manifest = root / "app" / "src" / "main" / "AndroidManifest.xml"
-              if (app_gradle.is_file() or app_gradle_groovy.is_file()) and manifest.is_file():
+              has_app_gradle = (
+                  (root / "app" / "build.gradle.kts").is_file()
+                  or (root / "app" / "build.gradle").is_file()
+              )
+              has_manifest = (root / "app" / "src" / "main" / "AndroidManifest.xml").is_file()
+              if has_app_gradle and has_manifest:
                   candidates.append(root.resolve())
 
-          # Remove duplicate paths while preserving order.
           candidates = list(dict.fromkeys(candidates))
           if len(candidates) != 1:
               raise SystemExit(
-                  "Could not identify one unique Android project root. "
-                  f"Valid project roots found: {[str(p) for p in candidates]}"
+                  "ERROR: Expected exactly one Android project root inside the ZIP. "
+                  f"Found: {[str(p) for p in candidates]}"
               )
 
           project_dir = candidates[0]
@@ -89,67 +115,46 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
               output.write(f"project_dir={project_dir}\n")
 
-          print(f"Detected Android project root: {project_dir}")
-          print("Verified: settings file, app Gradle file, and AndroidManifest.xml are present.")
+          print(f"SUCCESS: Android project root detected: {project_dir}")
+          print("Required settings file, app Gradle file, and AndroidManifest.xml are present.")
           PY
 
       - name: 3. Set up Java JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-          cache: gradle
+          # Gradle project is extracted into RUNNER_TEMP, not the repository checkout.
+          # Do not enable setup-java's Gradle cache dependency-file scan here.
 
-      - name: 4. Prepare Android SDK API 37
+      - name: 4. Install Android SDK API 37 and Build Tools 36.0.0
+        uses: android-actions/setup-android@v3
+
+      - name: 5. Install required Android SDK components
         shell: bash
         run: |
           set -euo pipefail
-          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
-          if [ ! -d "$SDK_ROOT" ]; then
-            echo "Android SDK directory was not found: $SDK_ROOT"
-            exit 1
-          fi
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platform-tools" "platforms;android-37" "build-tools;36.0.0"
+          test -d "${ANDROID_HOME}/platforms/android-37"
+          test -d "${ANDROID_HOME}/build-tools/36.0.0"
 
-          SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager 2>/dev/null | sort | tail -n 1)"
-          if [ -z "$SDKMANAGER" ]; then
-            echo "sdkmanager was not found under $SDK_ROOT/cmdline-tools"
-            exit 1
-          fi
-
-          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
-          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
-          echo "$(dirname "$SDKMANAGER")" >> "$GITHUB_PATH"
-          echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
-
-          # Accept licences, then install the exact SDK packages required by this project.
-          set +o pipefail
-          yes | "$SDKMANAGER" --sdk_root="$SDK_ROOT" --licenses >/dev/null || true
-          set -o pipefail
-          "$SDKMANAGER" --sdk_root="$SDK_ROOT" --install \
-            "platform-tools" \
-            "platforms;android-37" \
-            "build-tools;36.0.0"
-
-          test -d "$SDK_ROOT/platforms/android-37"
-          test -d "$SDK_ROOT/build-tools/36.0.0"
-          echo "Android SDK API 37 and Build Tools 36.0.0 are ready."
-
-      - name: 5. Set up Gradle 9.3.1
+      - name: 6. Set up Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.3.1'
 
-      - name: 6. Build Lucky Dangle Debug APK
+      - name: 7. Build Lucky Dangle Debug APK
         shell: bash
         run: |
           set -euo pipefail
-          echo "Building project at: $PROJECT_DIR"
+          echo "Android project: $PROJECT_DIR"
           cd "$PROJECT_DIR"
           gradle --no-daemon --stacktrace assembleDebug
           test -s app/build/outputs/apk/debug/app-debug.apk
-          echo "APK build completed successfully."
+          echo "APK build completed and APK file verified."
 
-      - name: 7. Upload APK as Actions Artifact
+      - name: 8. Upload APK as GitHub Actions Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Lucky-Dangle-Android-Debug-APK
@@ -157,15 +162,14 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: 8. Publish APK as GitHub Release
+      - name: 9. Publish APK as GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: lucky-dangle-apk-${{ github.run_number }}
           name: Lucky Dangle APK Build ${{ github.run_number }}
           body: |
             Automated Lucky Dangle Android Debug APK build.
-
-            - Android project root was detected automatically from the uploaded ZIP.
+            - Android project root detected automatically inside the uploaded ZIP.
             - Android Gradle Plugin: 9.1.1
             - Gradle: 9.3.1
             - Compile SDK: 37
