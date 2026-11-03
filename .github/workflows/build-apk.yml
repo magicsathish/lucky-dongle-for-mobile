@@ -1,4 +1,4 @@
-name: ARM64 Only Release APK
+name: Lucky Dangle ARM64 Release APK
 
 on:
 workflow_dispatch:
@@ -6,109 +6,271 @@ workflow_dispatch:
 permissions:
 contents: read
 
+concurrency:
+group: lucky-dangle-arm64-${{ github.ref }}
+cancel-in-progress: true
+
 jobs:
-build:
-name: Build ARM64 Release APK
+build-apk:
+name: Extract ZIP and Build ARM64 Release APK
 runs-on: ubuntu-latest
+timeout-minutes: 60
 
 steps:
-  - name: Checkout Repository
+  - name: 1. Checkout Repository
     uses: actions/checkout@v4
 
-  - name: Set Up JDK 17
-    uses: actions/setup-java@v4
+  - name: 2. Find and Safely Extract Project ZIP
+    id: detect
+    shell: bash
+    run: |
+      set -euo pipefail
+
+      python3 <<'PY'
+      import os
+      import shutil
+      import zipfile
+      from pathlib import Path, PurePosixPath
+
+      workspace = Path(os.environ["GITHUB_WORKSPACE"]).resolve()
+      extract_dir = Path(os.environ["RUNNER_TEMP"]) / "lucky-arm64-extracted"
+
+      if extract_dir.exists():
+          shutil.rmtree(extract_dir)
+
+      extract_dir.mkdir(parents=True)
+
+      ignored = {".git", ".gradle", "build", "node_modules"}
+
+      archives = sorted(
+          p for p in workspace.rglob("*")
+          if p.is_file()
+          and p.suffix.lower() == ".zip"
+          and not any(
+              part in ignored
+              for part in p.relative_to(workspace).parts
+          )
+      )
+
+      print("ZIP files found:")
+      for archive in archives:
+          print(" -", archive.relative_to(workspace))
+
+      if len(archives) != 1:
+          raise SystemExit(
+              f"Expected exactly one project ZIP. Found: {len(archives)}"
+          )
+
+      archive = archives[0]
+
+      with zipfile.ZipFile(archive) as zf:
+          for info in zf.infolist():
+              name = info.filename.replace("\\", "/")
+              member = PurePosixPath(name)
+
+              if member.is_absolute() or ".." in member.parts:
+                  raise SystemExit(f"Unsafe ZIP entry: {info.filename}")
+
+              target = (extract_dir / Path(*member.parts)).resolve()
+
+              if extract_dir.resolve() not in target.parents and target != extract_dir.resolve():
+                  raise SystemExit(f"ZIP path escape: {info.filename}")
+
+          zf.extractall(extract_dir)
+
+      candidates = []
+
+      settings_files = list(extract_dir.rglob("settings.gradle"))
+      settings_files += list(extract_dir.rglob("settings.gradle.kts"))
+
+      for settings in settings_files:
+          root = settings.parent
+
+          app_gradle = (
+              (root / "app" / "build.gradle").is_file()
+              or (root / "app" / "build.gradle.kts").is_file()
+          )
+
+          manifest = (
+              root / "app" / "src" / "main" / "AndroidManifest.xml"
+          ).is_file()
+
+          if app_gradle and manifest:
+              candidates.append(root.resolve())
+
+      candidates = list(dict.fromkeys(candidates))
+
+      if len(candidates) != 1:
+          raise SystemExit(
+              "Could not identify exactly one Android project root. "
+              f"Found: {[str(p) for p in candidates]}"
+          )
+
+      project = candidates[0]
+
+      with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+          output.write(f"project_dir={project}\n")
+
+      print(f"Android project root: {project}")
+
+  - name: 3. Set Up Java 17
+    uses: actions/setup-java@v5
     with:
       distribution: temurin
       java-version: '17'
 
-  - name: Setup Gradle
+  - name: 4. Install Android SDK API 37
+    shell: bash
+    run: |
+      set -euo pipefail
+
+      SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+
+      if [ ! -d "$SDK_ROOT" ]; then
+        echo "ERROR: Android SDK not found."
+        exit 1
+      fi
+
+      SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" \
+        -type f -name sdkmanager 2>/dev/null \
+        | sort -V | tail -n 1)"
+
+      if [ -z "$SDKMANAGER" ]; then
+        echo "ERROR: sdkmanager not found."
+        exit 1
+      fi
+
+      echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
+      echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+
+      echo "$(dirname "$SDKMANAGER")" >> "$GITHUB_PATH"
+      echo "$SDK_ROOT/platform-tools" >> "$GITHUB_PATH"
+
+      set +o pipefail
+      yes | "$SDKMANAGER" \
+        --sdk_root="$SDK_ROOT" \
+        --licenses >/dev/null 2>&1 || true
+      set -o pipefail
+
+      "$SDKMANAGER" \
+        --sdk_root="$SDK_ROOT" \
+        --channel=3 \
+        --install \
+        "platform-tools" \
+        "platforms;android-37.0" \
+        "build-tools;36.0.0"
+
+      if [ ! -d "$SDK_ROOT/platforms/android-37.0" ]; then
+        echo "ERROR: Android SDK API 37 installation failed."
+        exit 1
+      fi
+
+      if [ ! -d "$SDK_ROOT/platforms/android-37" ]; then
+        ln -s android-37.0 "$SDK_ROOT/platforms/android-37"
+      fi
+
+      test -d "$SDK_ROOT/build-tools/36.0.0"
+
+      echo "Android SDK ready."
+
+  - name: 5. Set Up Gradle 9.3.1
     uses: gradle/actions/setup-gradle@v4
+    with:
+      gradle-version: '9.3.1'
 
-  - name: Detect Android Project Root
-    id: project
+  - name: 6. Configure ARM64 Only
+    working-directory: ${{ steps.detect.outputs.project_dir }}
     shell: bash
     run: |
-      set -e
+      set -euo pipefail
 
-      ROOT=""
+      cat > "$RUNNER_TEMP/arm64-only.init.gradle" <<'GRADLE'
+      allprojects { project ->
+          project.plugins.withId("com.android.application") {
+              def androidExtension = project.extensions.getByName("android")
+              def filters = androidExtension.defaultConfig.ndk.abiFilters
 
-      if [ -f "./settings.gradle" ] || [ -f "./settings.gradle.kts" ]; then
-        ROOT="."
-      else
-        while IFS= read -r file; do
-          candidate="$(dirname "$file")"
-          if [ -f "$candidate/settings.gradle" ] || [ -f "$candidate/settings.gradle.kts" ]; then
-            ROOT="$candidate"
-            break
-          fi
-        done < <(find . -type f -name settings.gradle -o -name settings.gradle.kts -not -path '*/.gradle/*')
-      fi
+              filters.clear()
+              filters.add("arm64-v8a")
 
-      if [ -z "$ROOT" ]; then
-        echo "ERROR: Android Gradle project root not found."
-        exit 1
-      fi
+              println("ARM64 ABI filter configured for: " + project.path)
+          }
+      }
+      GRADLE
 
-      echo "Project root: $ROOT"
-      echo "root=$ROOT" >> "$GITHUB_OUTPUT"
+      echo "ARM64 Gradle configuration prepared."
 
-  - name: Validate Android Project
-    working-directory: ${{ steps.project.outputs.root }}
+  - name: 7. Build Release APK
+    working-directory: ${{ steps.detect.outputs.project_dir }}
     shell: bash
     run: |
-      set -e
-      test -f gradlew
-      test -f app/build.gradle || test -f app/build.gradle.kts
-      chmod +x gradlew
+      set -euo pipefail
 
-  - name: Build ARM64 Release APK
-    working-directory: ${{ steps.project.outputs.root }}
-    shell: bash
-    run: |
-      ./gradlew :app:assembleRelease \
-        -PreactNativeArchitectures=arm64-v8a \
-        -Pandroid.injected.build.abi=arm64-v8a \
+      gradle \
         --no-daemon \
-        --stacktrace
+        --stacktrace \
+        -I "$RUNNER_TEMP/arm64-only.init.gradle" \
+        :app:assembleRelease
 
-  - name: Verify APK ABI
-    working-directory: ${{ steps.project.outputs.root }}
+      echo "Release build completed."
+
+  - name: 8. Verify APK Architecture
+    id: verify
+    working-directory: ${{ steps.detect.outputs.project_dir }}
     shell: bash
     run: |
-      set -e
+      set -euo pipefail
 
-      APK=$(find app/build/outputs/apk/release -type f -name '*.apk' | head -n 1)
+      APK_DIR="app/build/outputs/apk/release"
 
-      if [ -z "$APK" ]; then
-        echo "ERROR: Release APK not found."
+      if [ ! -d "$APK_DIR" ]; then
+        echo "ERROR: Release APK directory not found."
         exit 1
       fi
 
-      echo "APK: $APK"
-      ls -lh "$APK"
+      mapfile -t APKS < <(find "$APK_DIR" -type f -name '*.apk' | sort)
 
-      if ! command -v unzip >/dev/null 2>&1; then
-        sudo apt-get update
-        sudo apt-get install -y unzip
-      fi
-
-      echo "Native ABI directories:"
-      unzip -Z1 "$APK" | grep '^lib/' | cut -d/ -f2 | sort -u || true
-
-      ABI_LIST=$(unzip -Z1 "$APK" | grep '^lib/' | cut -d/ -f2 | sort -u)
-
-      if [ "$ABI_LIST" != "arm64-v8a" ]; then
-        echo "ERROR: APK contains unexpected ABIs:"
-        echo "$ABI_LIST"
+      if [ "${#APKS[@]}" -eq 0 ]; then
+        echo "ERROR: No Release APK generated."
         exit 1
       fi
 
-      echo "SUCCESS: ARM64-only APK verified."
+      sudo apt-get update
+      sudo apt-get install -y unzip
 
-  - name: Upload ARM64 APK
+      for APK in "${APKS[@]}"; do
+        echo "--------------------------------"
+        echo "APK: $APK"
+        ls -lh "$APK"
+
+        mapfile -t ABIS < <(
+          unzip -Z1 "$APK" \
+            | awk -F/ '$1 == "lib" && NF >= 3 {print $2}' \
+            | sort -u
+        )
+
+        echo "Detected ABIs:"
+        printf '%s\n' "${ABIS[@]}"
+
+        if [ "${#ABIS[@]}" -eq 0 ]; then
+          echo "ERROR: No native ABI libraries found."
+          exit 1
+        fi
+
+        if [ "${#ABIS[@]}" -ne 1 ] || [ "${ABIS[0]}" != "arm64-v8a" ]; then
+          echo "ERROR: APK is not ARM64-only."
+          exit 1
+        fi
+
+        echo "Verified: ARM64 only."
+      done
+
+      echo "apk_dir=$APK_DIR" >> "$GITHUB_OUTPUT"
+
+  - name: 9. Upload ARM64 Release APK
     uses: actions/upload-artifact@v4
     with:
-      name: Lucky-Dongle-Browser-ARM64-Release
-      path: ${{ steps.project.outputs.root }}/app/build/outputs/apk/release/*.apk
+      name: Lucky-Dangle-ARM64-Release
+      path: ${{ steps.detect.outputs.project_dir }}/app/build/outputs/apk/release/*.apk
       if-no-files-found: error
       retention-days: 14
